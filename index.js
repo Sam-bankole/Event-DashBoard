@@ -722,7 +722,80 @@ window.addEventListener("click", (event) => {
   }
 });
 
-// pagination update
+
+// Filter by date range
+document.getElementById('filterDate').addEventListener("change", (e) => {
+  const filterDate = e.target.value;
+const now = new Date();
+if (filterDate) {
+    const startDate = new Date();
+    if (filterDate === 'lastWeek') {
+        startDate.setDate(now.getDate() - 7);
+    } else if (filterDate === 'lastMonth') {
+        startDate.setMonth(now.getMonth() - 1);
+    } else if (filterDate === 'lastYear') {
+        startDate.setFullYear(now.getFullYear() - 1);
+    }
+    filteredData = data.filter(event => new Date(event.date) >= startDate);
+}
+renderTable(filteredData, currentPage, rowsPerPage);
+
+});
+
+
+
+// status filter
+
+document.getElementById("filterStatus").addEventListener("change", (e) => {
+  const selectedStatus = e.target.value;
+  if (selectedStatus) {
+    filteredData = data.filter((item) => item.status === selectedStatus);
+  } else {
+    filteredData = [...data]; // Reset to all data if no status is selected
+  }
+  currentPage = 1; // Reset to the first page
+  renderTable(filteredData, currentPage, rowsPerPage);
+});
+
+
+// search filter
+document.getElementById("searchInput").addEventListener("input", (e) => {
+  const query = e.target.value.toLowerCase();
+  filteredData = data.filter((item) =>
+    item.eventName.toLowerCase().includes(query)
+  );
+  currentPage = 1; // Reset to the first page after filtering
+  renderTable(filteredData, currentPage, rowsPerPage);
+});
+
+
+// export Btn
+
+document.getElementById("exportBtn").addEventListener("click", () => {
+  const csvContent = [
+    ["Event Name", "Date", "Speaker", "Status", "Description", "Attendees"],
+    ...filteredData.map((row) => [
+      row.eventName,
+      row.date,
+      row.speaker,
+      row.status,
+      row.eventDescription,
+      row.attendees,
+    ]),
+  ]
+    .map((row) => row.join(","))
+    .join("\n");
+
+  const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(blob);
+  link.setAttribute("download", "events.csv");
+  link.click();
+});
+
+
+
+// pagination
 function updatePagination(totalItems) {
   const totalPages = Math.ceil(totalItems / rowsPerPage);
   const paginationNumbers = document.getElementById("paginationNumbers");

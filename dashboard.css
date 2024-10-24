@@ -292,7 +292,7 @@
   align-items: center;
   gap: 10px;
 }
-#searchBar {
+#searchInput {
   width: 200px;
   height: 36px;
   border-radius: 2px;
@@ -305,10 +305,10 @@
   background-repeat: no-repeat;
   cursor: pointer;
 }
-#searchBar:hover {
+#searchInput:hover {
   border: 1.5px solid #d5dae1;
 }
-.dark-mode #searchBar {
+.dark-mode #searchInput {
   color: #e2e8f0;
 }
 #filterDate,
