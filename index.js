@@ -736,6 +736,9 @@ if (filterDate) {
     } else if (filterDate === 'lastYear') {
         startDate.setFullYear(now.getFullYear() - 1);
     }
+    else if (filterDate === '') {
+      filterDate = [...data]
+  }
     filteredData = data.filter(event => new Date(event.date) >= startDate);
 }
 renderTable(filteredData, currentPage, rowsPerPage);
@@ -751,9 +754,9 @@ document.getElementById("filterStatus").addEventListener("change", (e) => {
   if (selectedStatus) {
     filteredData = data.filter((item) => item.status === selectedStatus);
   } else {
-    filteredData = [...data]; // Reset to all data if no status is selected
+    filteredData = [...data];
   }
-  currentPage = 1; // Reset to the first page
+  currentPage = 1;
   renderTable(filteredData, currentPage, rowsPerPage);
 });
 
@@ -764,7 +767,7 @@ document.getElementById("searchInput").addEventListener("input", (e) => {
   filteredData = data.filter((item) =>
     item.eventName.toLowerCase().includes(query)
   );
-  currentPage = 1; // Reset to the first page after filtering
+  currentPage = 1;
   renderTable(filteredData, currentPage, rowsPerPage);
 });
 
