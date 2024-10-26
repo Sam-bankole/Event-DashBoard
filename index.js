@@ -161,6 +161,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (themeCheckbox.checked) {
       sideBar.style.backgroundColor = "#484554";
       sideBar.style.borderRight = "#484554";
+      sideBar.style.borderLeft = "none";
       body.style.backgroundColor = "#383544";
       sideBar.style.color = "#FCF7FF";
       openSvg.style.stroke = "#FFFFFF";
@@ -219,6 +220,7 @@ document.addEventListener("DOMContentLoaded", () => {
           svg.style.stroke = "#FCF7FF";
         }
       }
+      localStorage.setItem("darkMode", "enabled");
     } else {
       resBar.style.backgroundColor = "";
       resBar.style.border = "";
@@ -226,8 +228,8 @@ document.addEventListener("DOMContentLoaded", () => {
       sideBar.style.backgroundColor = "";
       body.style.backgroundColor = "";
       sideBar.style.color = "";
-      sideBar.style.borderRight = "none";
-      sideBar.style.borderLeft = "none";
+      sideBar.style.borderRight = "";
+      sideBar.style.borderLeft = "";
       openSvg.style.stroke = "";
       collapseSvg.style.stroke = "";
       profileEmail.style.color = "";
@@ -276,7 +278,14 @@ document.addEventListener("DOMContentLoaded", () => {
           svg.style.stroke = "#8576ff";
         }
       }
+      localStorage.setItem("darkMode", "disabled");
     }
+  }
+
+  const savedDarkMode = localStorage.getItem("darkMode");
+  if (savedDarkMode === "enabled") {
+    themeCheckbox.checked = true;
+    toggleDarkMode();
   }
 
   darkModeToggle.addEventListener("click", () => {
@@ -722,30 +731,25 @@ window.addEventListener("click", (event) => {
   }
 });
 
-
 // Filter by date range
-document.getElementById('filterDate').addEventListener("change", (e) => {
+document.getElementById("filterDate").addEventListener("change", (e) => {
   const filterDate = e.target.value;
-const now = new Date();
-if (filterDate) {
+  const now = new Date();
+  if (filterDate) {
     const startDate = new Date();
-    if (filterDate === 'lastWeek') {
-        startDate.setDate(now.getDate() - 7);
-    } else if (filterDate === 'lastMonth') {
-        startDate.setMonth(now.getMonth() - 1);
-    } else if (filterDate === 'lastYear') {
-        startDate.setFullYear(now.getFullYear() - 1);
+    if (filterDate === "lastWeek") {
+      startDate.setDate(now.getDate() - 7);
+    } else if (filterDate === "lastMonth") {
+      startDate.setMonth(now.getMonth() - 1);
+    } else if (filterDate === "lastYear") {
+      startDate.setFullYear(now.getFullYear() - 1);
+    } else if (filterDate === "") {
+      filterDate = [...data];
     }
-    else if (filterDate === '') {
-      filterDate = [...data]
+    filteredData = data.filter((event) => new Date(event.date) >= startDate);
   }
-    filteredData = data.filter(event => new Date(event.date) >= startDate);
-}
-renderTable(filteredData, currentPage, rowsPerPage);
-
+  renderTable(filteredData, currentPage, rowsPerPage);
 });
-
-
 
 // status filter
 
@@ -760,7 +764,6 @@ document.getElementById("filterStatus").addEventListener("change", (e) => {
   renderTable(filteredData, currentPage, rowsPerPage);
 });
 
-
 // search filter
 document.getElementById("searchInput").addEventListener("input", (e) => {
   const query = e.target.value.toLowerCase();
@@ -770,7 +773,6 @@ document.getElementById("searchInput").addEventListener("input", (e) => {
   currentPage = 1;
   renderTable(filteredData, currentPage, rowsPerPage);
 });
-
 
 // export Btn
 
@@ -795,8 +797,6 @@ document.getElementById("exportBtn").addEventListener("click", () => {
   link.setAttribute("download", "events.csv");
   link.click();
 });
-
-
 
 // pagination
 function updatePagination(totalItems) {
@@ -885,10 +885,6 @@ function handleScreenResize() {
 handleScreenResize();
 
 window.addEventListener("resize", handleScreenResize);
-
-window.addEventListener("resize", () => {
-  window.location.reload();
-});
 
 let resizeTimeout;
 window.addEventListener("resize", () => {

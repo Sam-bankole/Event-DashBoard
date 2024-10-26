@@ -115,9 +115,13 @@
 }
 
 @media screen and (max-width: 682px) {
-    .body{
-        margin-bottom: 55px;
-    }
+  .sideBar {
+    width: 90%;
+    /* border-left: none ; */
+  }
+  .body {
+    margin-bottom: 55px;
+  }
   .heading > h1 {
     font-size: 17px;
   }
@@ -251,10 +255,10 @@
     text-align: center;
     box-shadow: 0px 1px 0px 0px #f3f4f6 inset;
   }
-  .botton-nav-con{
+  .botton-nav-con {
     padding-top: 1.6px;
     position: fixed;
-    bottom: -100px; 
+    bottom: -100px;
     left: 0;
     width: 100%;
     z-index: 99999;
@@ -304,5 +308,13 @@
   .grid-line-hor {
     top: 0;
     height: 88%;
+  }
+  #searchInput {
+    width: 90%;
+    padding-left: 30px;
+  }
+  .select:not(:-internal-list-box) {
+    overflow: hidden;
+    background-color: #10b981;
   }
 }
